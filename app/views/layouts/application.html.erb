@@ -5,11 +5,13 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
-    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <%= stylesheet_link_tag asset_url('css/app.css'), media: 'all' %>
   </head>
 
   <body>
-    <%= yield %>
+    <v-app id="app">
+      <%= yield %>
+    </v-app>
+    <%= javascript_include_tag asset_url('js/app.js') %>
   </body>
 </html>
