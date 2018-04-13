@@ -1,20 +1,28 @@
 <template>
-    <v-form
-        ref="form"
-        v-model="valid"
-        method="POST"
-        lazy-validation
-    >
-        <CSRFField />
-        <v-text-field
-            v-model="url"
-            :rules="urlRules"
-            name="url"
-            label="Url"
-            required
-        />
-        <v-btn @click="submit">Submit</v-btn>
-    </v-form>
+    <div class="flex items-center justify-center w-screen h-screen">
+        <v-form
+            ref="form"
+            v-model="valid"
+            method="POST"
+            class="bg-white p-4 rounded w-screen-90 max-w-xl border border-gray"
+            lazy-validation
+        >
+            <CSRFField />
+            <v-text-field
+                v-model="url"
+                :rules="urlRules"
+                name="url"
+                label="Url"
+                required
+            />
+            <v-btn
+                color="primary"
+                @click="submit"
+            >
+                Authenticate
+            </v-btn>
+        </v-form>
+    </div>
 </template>
 
 <script>

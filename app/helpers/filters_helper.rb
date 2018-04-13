@@ -1,6 +1,6 @@
 module FiltersHelper
   def authenticate!
-    unless logged_in?
+    unless session.key? :admp_access_token
       redirect_to login_path
     end
   end

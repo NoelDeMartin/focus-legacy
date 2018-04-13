@@ -1,5 +1,4 @@
 class ApplicationController < ActionController::Base
-  include AuthHelper
   include FiltersHelper
 
   before_action :authenticate!

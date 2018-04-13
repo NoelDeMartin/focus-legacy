@@ -10,7 +10,7 @@ module.exports = {
     entry: {
         app: [
             './app/assets/js/app.js',
-            './app/assets/sass/app.scss',
+            './app/assets/styles/app.scss',
         ],
     },
 
@@ -34,6 +34,14 @@ module.exports = {
                 use: [
                     MiniCssExtractPlugin.loader,
                     'css-loader',
+                    {
+                        loader: 'postcss-loader',
+                        options: {
+                            config: {
+                                path: path.resolve(__dirname, 'app/assets/styles'),
+                            },
+                        },
+                    },
                     'sass-loader',
                 ],
                 exclude: /node_modules/,
