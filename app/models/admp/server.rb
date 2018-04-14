@@ -1,16 +1,16 @@
 module Admp
-  class Service
+  class Server
     include Mongoid::Document
     include Mongoid::Timestamps
 
     field :client_id, type: String
     field :client_secret, type: String
     field :state, type: String
-    field :root_uri, type: String
+    field :url, type: String
 
-    validates :root_uri, presence: true
+    validates :url, presence: true
 
-    index({ root_uri: 1 }, { unique: true, name: 'root_uri_index' })
+    index({ url: 1 }, { unique: true, name: 'url_index' })
     index({ state: 1 }, { unique: true, name: 'state_index' })
   end
 end

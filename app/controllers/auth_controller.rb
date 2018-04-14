@@ -9,11 +9,11 @@ class AuthController < ApplicationController
   def login
 
     url = params.require(:url)
-    service = Admp::Service::find_by(root_uri: url)
+    server = Admp::Server::find_by(url: url)
 
-    if service.nil?
-      service = Admp::Service::create!(
-        root_uri: url,
+    if server.nil?
+      server = Admp::Server::create!(
+        url: url,
         state: session[:admp_state]
       )
     else
@@ -21,12 +21,12 @@ class AuthController < ApplicationController
       # TODO if not registered, handle pending registration
     end
 
-    # TODO handle edge cases with state being different in session and service
+    # TODO handle edge cases with state being different in session and server
 
-    redirect_to url + \
+    redirect_to server.url + '/register' + \
       '?callback_uri=' + Rack::Utils.escape(admp_registered_url) + \
       '&name=' + Rack::Utils.escape('Focus -- Task Manager') + \
-      '&state=' + Rack::Utils.escape(service.state) + \
+      '&state=' + Rack::Utils.escape(server.state) + \
       '&auth[scope]=todo' + \
       '&auth[response_type]=code'
   end

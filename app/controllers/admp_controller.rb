@@ -1,10 +1,12 @@
+require 'net/http'
+
 class AdmpController < ApplicationController
   skip_before_action :authenticate!
 
   def registered
-    service = Admp::Service::find_by(state: params.require(:state))
-    if service
-      service.update!(
+    server = Admp::Server::find_by(state: params.require(:state))
+    if server
+      server.update!(
         client_id: params.require(:client_id),
         client_secret: params.require(:client_secret),
       )
@@ -15,22 +17,43 @@ class AdmpController < ApplicationController
   end
 
   def authorized
-    service = Admp::Service::find_by(state: params.require(:state))
+    server = Admp::Server::find_by(state: params.require(:state))
 
-    if service && service.state == session[:admp_state]
+    if server && server.state == session[:admp_state]
+      response = Net::HTTP.post_form URI(server.url + '/token'),
+                                      {
+                                        :grant_type    => 'authorization_code',
+                                        :client_id     => server.client_id,
+                                        :client_secret => server.client_secret,
+                                        :code          => params.require('code'),
+                                      }
 
-      # TODO Retrieve access_token using code request
-      access_token = 'access_token'
+      if response.is_a?(Net::HTTPSuccess)
+        response = JSON.parse(response.body)
 
-      # TODO remove state from service
-      session.delete :admp_state
+        if response.key? 'access_token'
+          # TODO remove state from server
+          session.delete :admp_state
 
-      session[:admp_access_token] = access_token
+          session[:admp_access_token] = response['access_token']
 
-      redirect_to root_path
+          redirect_to root_path
+        else
+          client.destroy
+
+          # TODO implement error view
+          raise 'Server request did not return access_token'
+        end
+
+      else
+        client.destroy
+
+        # TODO implement error view
+        raise 'Server request did not complete successfuly'
+      end
     else
       # TODO implement error view
-      render plain: 'State argument is invalid for this session'
+      raise 'State argument is invalid for this session'
     end
   end
 end
