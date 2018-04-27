@@ -37,6 +37,9 @@
  */
 @import "../../../node_modules/vuetify/dist/vuetify.css";
 
+$material-design-icons-font-path: "../../../node_modules/material-design-icons-iconfont/dist/fonts/";
+@import "../../../node_modules/material-design-icons-iconfont/dist/material-design-icons.scss";
+
 /**
  * This injects all of Tailwind's utility classes, generated based on your
  * config file.
@@ -61,3 +64,4 @@
  * @import "utilities/background-patterns";
  * @import "utilities/skew-transforms";
  */
+@import "base"

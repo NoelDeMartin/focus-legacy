@@ -1,5 +1,5 @@
 class HomeController < ApplicationController
   def index
-    render plain: 'user logged in with access token: ' + session[:admp_access_token]
+    render file: 'app'
   end
 end

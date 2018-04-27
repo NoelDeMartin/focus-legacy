@@ -19,7 +19,7 @@ class AdmpController < ApplicationController
   def authorized
     server = Admp::Server::find_by(state: params.require(:state))
 
-    if server && server.state == session[:admp_state]
+    if not server.nil? and server.state == session[:admp_state]
       response = Net::HTTP.post_form URI(server.url + '/token'),
                                       {
                                         :grant_type    => 'authorization_code',
@@ -32,8 +32,8 @@ class AdmpController < ApplicationController
         response = JSON.parse(response.body)
 
         if response.key? 'access_token'
-          # TODO remove state from server
           session.delete :admp_state
+          server.unset(:state)
 
           session[:admp_access_token] = response['access_token']
 

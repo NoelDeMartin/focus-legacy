@@ -5,6 +5,20 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const inProduction = process.env.NODE_ENV === 'production';
 
+const scssLoaders = [
+    MiniCssExtractPlugin.loader,
+    'css-loader',
+    {
+        loader: 'postcss-loader',
+        options: {
+            config: {
+                path: path.resolve(__dirname, 'app/assets/styles'),
+            },
+        },
+    },
+    'sass-loader',
+];
+
 module.exports = {
 
     entry: {
@@ -31,19 +45,7 @@ module.exports = {
 
             {
                 test: /\.scss$/,
-                use: [
-                    MiniCssExtractPlugin.loader,
-                    'css-loader',
-                    {
-                        loader: 'postcss-loader',
-                        options: {
-                            config: {
-                                path: path.resolve(__dirname, 'app/assets/styles'),
-                            },
-                        },
-                    },
-                    'sass-loader',
-                ],
+                use: scssLoaders,
                 exclude: /node_modules/,
             },
 
@@ -52,11 +54,24 @@ module.exports = {
                 use: [
                     {
                         loader: 'vue-loader',
-                        options: { extractCSS: true },
+                        options: {
+                            loaders: {
+                                scss: scssLoaders,
+                            },
+                        },
                     },
                     'eslint-loader',
                 ],
                 exclude: /node_modules/,
+            },
+
+            {
+                test: /\.(ttf|woff|woff2|eot)$/,
+                loader: 'file-loader',
+                options: {
+                    name: 'fonts/[name].[ext]',
+                    outputPath: '/fonts/',
+                },
             },
 
         ],
@@ -68,6 +83,7 @@ module.exports = {
             [
                 'public/js',
                 'public/css',
+                'public/fonts',
                 'public/manifest.json',
             ],
             {
@@ -83,12 +99,17 @@ module.exports = {
         function() {
             this.plugin('afterEmit', function(compilation) {
                 const assetNames = Object.getOwnPropertyNames(compilation.assets);
+                const manifest = {};
+                for (let name of assetNames) {
+                    if (name.startsWith('css/app')) {
+                        manifest['css/app.css'] = name;
+                    } else if (name.startsWith('js/app')) {
+                        manifest['js/app.js'] = name;
+                    }
+                }
                 require('fs').writeFileSync(
                     path.resolve(__dirname, 'public/manifest.json'),
-                    JSON.stringify({
-                        'css/app.css': assetNames[0],
-                        'js/app.js': assetNames[1],
-                    })
+                    JSON.stringify(manifest)
                 );
             });
         },

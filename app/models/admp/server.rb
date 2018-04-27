@@ -12,5 +12,9 @@ module Admp
 
     index({ url: 1 }, { unique: true, name: 'url_index' })
     index({ state: 1 }, { unique: true, name: 'state_index' })
+
+    def registered?
+      not (self.client_id.blank? or self.client_secret.blank?)
+    end
   end
 end

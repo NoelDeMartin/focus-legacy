@@ -1,0 +1,7 @@
+html {
+    /*
+    * Override Vuetify defaults
+    * See: https://github.com/vuetifyjs/vuetify/issues/2132#issuecomment-347211864
+    */
+    overflow-y: auto !important;
+}
