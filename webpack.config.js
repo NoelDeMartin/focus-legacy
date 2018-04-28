@@ -44,6 +44,21 @@ module.exports = {
             },
 
             {
+                test: /\.ts$/,
+                use: [
+                    'babel-loader',
+                    {
+                        loader: 'ts-loader',
+                        options: {
+                            appendTsSuffixTo: [/\.vue$/],
+                        },
+                    },
+                    'tslint-loader',
+                ],
+                exclude: /node_modules/,
+            },
+
+            {
                 test: /\.scss$/,
                 use: scssLoaders,
                 exclude: /node_modules/,
@@ -70,7 +85,7 @@ module.exports = {
                 loader: 'file-loader',
                 options: {
                     name: 'fonts/[name].[ext]',
-                    outputPath: '/fonts/',
+                    outputPath: '/',
                 },
             },
 
@@ -116,7 +131,7 @@ module.exports = {
     ],
 
     resolve: {
-        extensions: ['*', '.js'],
+        extensions: ['*', '.js', '.ts'],
         alias: {
             'vue$': 'vue/dist/vue.esm.js',
         },

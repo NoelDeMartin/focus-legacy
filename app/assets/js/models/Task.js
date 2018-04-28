@@ -1,4 +1,4 @@
-import Model from './Soukai';
+import Model from './Model';
 
 export default class extends Model {
     static collection = 'tasks';

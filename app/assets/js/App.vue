@@ -12,11 +12,12 @@
                 :task="task"
                 @toggle="toggleTask(task)"
             />
-        </div>
 
-        <p v-if="tasks.length == 0">
-            No Tasks
-        </p>
+            <p v-if="tasks.length == 0">
+                No Tasks
+            </p>
+
+        </div>
 
     </div>
 </template>
@@ -29,6 +30,7 @@ import TaskItem from './components/TaskItem.vue';
 import Task from './models/Task';
 import Soukai from './models/Soukai';
 import LogEngine from './models/LogEngine';
+import InMemoryEngine from './models/InMemoryEngine';
 
 export default {
     components: {
@@ -47,7 +49,7 @@ export default {
         };
     },
     created() {
-        Soukai.engine(new LogEngine());
+        Soukai.use(new LogEngine(new InMemoryEngine()));
         ADMP.init(this.accessToken);
         Task.all().then(tasks => {
             this.tasks = tasks;

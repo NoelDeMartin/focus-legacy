@@ -2,6 +2,7 @@
     "recommendations": [
         "rebornix.project-snippets",
         "dbaeumer.vscode-eslint",
-        "shinnn.stylelint"
+        "shinnn.stylelint",
+        "eg2.tslint"
     ]
 }
