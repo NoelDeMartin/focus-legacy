@@ -1,4 +1,4 @@
-import { PrimaryKey } from './SoukaiEngine';
+import { PrimaryKey } from '../SoukaiEngine';
 
 export default class extends Error {
 

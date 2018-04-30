@@ -1,4 +1,3 @@
-import ModelNotFound from './ModelNotFound';
 import SoukaiEngine, { Attributes, Document, PrimaryKey } from './SoukaiEngine';
 
 export default class implements SoukaiEngine {

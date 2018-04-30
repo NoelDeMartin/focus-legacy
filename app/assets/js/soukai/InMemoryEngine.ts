@@ -1,4 +1,4 @@
-import ModelNotFound from './ModelNotFound';
+import ModelNotFound from './errors/ModelNotFound';
 import SoukaiEngine, { Attributes, Document, PrimaryKey } from './SoukaiEngine';
 
 interface Collection {

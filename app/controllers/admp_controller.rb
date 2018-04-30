@@ -35,6 +35,7 @@ class AdmpController < ApplicationController
           session.delete :admp_state
           server.unset(:state)
 
+          session[:admp_server_url] = server.url
           session[:admp_access_token] = response['access_token']
 
           redirect_to root_path

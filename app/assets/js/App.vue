@@ -23,14 +23,14 @@
 </template>
 
 <script>
-import ADMP from './lib/ADMP';
-
 import TaskItem from './components/TaskItem.vue';
 
 import Task from './models/Task';
-import Soukai from './models/Soukai';
-import LogEngine from './models/LogEngine';
-import InMemoryEngine from './models/InMemoryEngine';
+
+import { definitionsFromContext } from './soukai/webpack-helpers';
+import Soukai from './soukai/Soukai';
+import LogEngine from './soukai/LogEngine';
+import ADMPEngine from './soukai/ADMPEngine';
 
 export default {
     components: {
@@ -38,6 +38,10 @@ export default {
     },
     props: {
         accessToken: {
+            type: String,
+            required: true,
+        },
+        serverUrl: {
             type: String,
             required: true,
         },
@@ -49,8 +53,8 @@ export default {
         };
     },
     created() {
-        Soukai.use(new LogEngine(new InMemoryEngine()));
-        ADMP.init(this.accessToken);
+        Soukai.useEngine(new LogEngine(new ADMPEngine(this.serverUrl, this.accessToken)));
+        Soukai.loadModels(definitionsFromContext(require.context('./models', true, /\.js$/)));
         Task.all().then(tasks => {
             this.tasks = tasks;
         });
