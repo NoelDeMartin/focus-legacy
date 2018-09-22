@@ -1,5 +1,5 @@
 class HomeController < ApplicationController
   def index
-    render file: 'app'
+    render file: 'home'
   end
 end

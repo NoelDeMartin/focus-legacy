@@ -1,14 +1,14 @@
-import Model, { Types } from '../soukai/Model';
+import { Model, FieldType } from 'soukai';
 
 export default class extends Model {
     static timestamps = true;
 
     static fields = {
-        name: Types.String,
-        completed_at: Types.Date,
+        name: FieldType.String,
+        completed_at: FieldType.Date,
     };
 
     get completed() {
-        return !!this.attributes.completed_at;
+        return !!this.getAttribute('completed_at');
     }
 }

@@ -19,25 +19,34 @@ class AuthController < ApplicationController
     else
       server.update!(state: session[:admp_state])
       if server.registered?
-        return redirect_to server.url + '/auth' + \
-          '?callback_uri=' + Rack::Utils.escape(admp_authorized_url) + \
-          '&state=' + Rack::Utils.escape(server.state) + \
-          '&scope=' + scope + \
-          '&response_type=code' + \
-          '&client_id=' + server.client_id + \
-          '&client_secret=' + server.client_secret
+        session[:auth] = server.id.to_str
+
+        return redirect_to root_path
+
+        # TODO request auth
+        # return redirect_to server.url + '/authorize' + \
+        #   '?callback_uri=' + Rack::Utils.escape(admp_authorized_url) + \
+        #   '&state=' + Rack::Utils.escape(server.state) + \
+        #   '&scope=' + scope + \
+        #   '&response_type=code' + \
+        #   '&client_id=' + server.client_id + \
+        #   '&client_secret=' + server.client_secret
       end
     end
 
     redirect_to server.url + '/register' + \
-      '?callback_uri=' + Rack::Utils.escape(admp_registered_url) + \
-      '&name=' + Rack::Utils.escape('Focus -- Task Manager') + \
+      '?callback_url=' + Rack::Utils.escape(callback_url) + \
+      '&redirect_url=' + Rack::Utils.escape(redirect_url) + \
+      '&name=' + Rack::Utils.escape('Focus') + \
+      '&description=' + Rack::Utils.escape('Task Manager') + \
       '&state=' + Rack::Utils.escape(server.state) + \
-      '&auth[scope]=' + scope + \
-      '&auth[response_type]=code'
+      '&domain=' + Rack::Utils.escape(URI.parse(root_url).host) + \
+      '&schema_url=' + Rack::Utils.escape(root_url + '/schema.graphql')
   end
 
   def logout
+    session.delete :admp_server_url
+    session.delete :admp_tasks_collection
     session.delete :admp_access_token
     redirect_to root_path
   end

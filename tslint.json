@@ -6,6 +6,7 @@
         "arrow-parens": false,
         "interface-name": false,
         "no-angle-bracket-type-assertion": false,
-        "variable-name": [true, "ban-keywords", "check-format", "allow-leading-underscore"]
+        "variable-name": [true, "ban-keywords", "check-format", "allow-leading-underscore"],
+        "object-literal-sort-keys": false
     }
 }

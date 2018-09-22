@@ -1,7 +1,7 @@
 <template>
     <div class="task-item bg-gray p-2 border border-b-0 border-grey flex items-center">
         <v-checkbox
-            :input-value="task.completed"
+            :input-value="task.completed_at"
             :hide-details="true"
             class="flex-no-grow"
             @click="$emit('toggle')"

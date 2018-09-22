@@ -6,9 +6,11 @@ class AdmpController < ApplicationController
   def registered
     server = Admp::Server::find_by(state: params.require(:state))
     if server
+      # TODO add collection name
       server.update!(
         client_id: params.require(:client_id),
         client_secret: params.require(:client_secret),
+        tasks_collection: params.require(:collections)[0],
       )
       render json: {redirect_uri: admp_authorized_url}
     else
@@ -36,6 +38,7 @@ class AdmpController < ApplicationController
           server.unset(:state)
 
           session[:admp_server_url] = server.url
+          session[:admp_tasks_collection] = server.tasks_collection
           session[:admp_access_token] = response['access_token']
 
           redirect_to root_path
